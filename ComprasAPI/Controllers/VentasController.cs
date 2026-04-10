@@ -10,10 +10,12 @@ namespace ComprasAPI.Controllers
     public class VentasController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public VentasController(AppDbContext context)
+        public VentasController(AppDbContext context, IHttpClientFactory httpClientFactory)
         {
             _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         // GET: api/Ventas
@@ -43,33 +45,62 @@ namespace ComprasAPI.Controllers
 
         // POST: api/Ventas
         [HttpPost]
-        public async Task<ActionResult<Venta>> PostVenta(Venta venta)
+        public async Task<ActionResult<Venta>> PostVenta(VentaRequest request)
         {
+            // 1. Validar que el usuario existe en ClientesAPI
+            var client = _httpClientFactory.CreateClient("ClientesAPI");
+            var response = await client.GetAsync($"api/Usuarios/{request.UsuarioId}");
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest($"El usuario con ID {request.UsuarioId} no existe.");
+
+            // 2. Validar que los productos existen y calcular totales
+            var detalles = new List<DetalleVenta>();
+            decimal subtotalTotal = 0;
+
+            foreach (var item in request.Detalles)
+            {
+                var producto = await _context.Productos.FindAsync(item.ProductoId);
+                if (producto == null)
+                    return BadRequest($"El producto con ID {item.ProductoId} no existe.");
+
+                if (producto.Stock < item.Cantidad)
+                    return BadRequest($"Stock insuficiente para '{producto.Nombre}'. Disponible: {producto.Stock}");
+
+                var subtotal = producto.Precio * item.Cantidad;
+                subtotalTotal += subtotal;
+
+                detalles.Add(new DetalleVenta
+                {
+                    ProductoId = item.ProductoId,
+                    Cantidad = item.Cantidad,
+                    PrecioUnitario = producto.Precio,
+                    Subtotal = subtotal
+                });
+
+                // 3. Descontar stock
+                producto.Stock -= item.Cantidad;
+            }
+
+            decimal iva = subtotalTotal * 0.15m; // IVA Ecuador 15%
+            decimal total = subtotalTotal + iva;
+
+            // 4. Crear la venta
+            var venta = new Venta
+            {
+                UsuarioId = request.UsuarioId,
+                FechaVenta = DateTime.UtcNow,
+                NumeroDocumento = $"VTA-{DateTime.UtcNow:yyyyMMddHHmmss}",
+                Subtotal = subtotalTotal,
+                IVA = iva,
+                Total = total,
+                DetallesVenta = detalles
+            };
+
             _context.Ventas.Add(venta);
             await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetVenta), new { id = venta.Id }, venta);
-        }
-
-        // PUT: api/Ventas/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutVenta(int id, Venta venta)
-        {
-            if (id != venta.Id)
-                return BadRequest();
-
-            _context.Entry(venta).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!_context.Ventas.Any(e => e.Id == id))
-                    return NotFound();
-                throw;
-            }
-            return NoContent();
         }
 
         // DELETE: api/Ventas/5
