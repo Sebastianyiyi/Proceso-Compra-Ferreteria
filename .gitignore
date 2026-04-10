@@ -1,0 +1,12 @@
+# .NET
+**/obj/
+**/bin/
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# NuGet
+*.nupkg
+*.sln
