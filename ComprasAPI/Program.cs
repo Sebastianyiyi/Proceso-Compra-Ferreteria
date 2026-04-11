@@ -15,7 +15,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddHttpClient("ClientesAPI", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5197/");
+    client.BaseAddress = new Uri(builder.Configuration["Servicios:ClientesAPI"]!);
 });
 
 builder.Services.AddEndpointsApiExplorer();
