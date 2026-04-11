@@ -12,18 +12,27 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = 
             System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
-    
+
 builder.Services.AddHttpClient("ClientesAPI", client =>
 {
     client.BaseAddress = new Uri("http://localhost:5197/");
 });
 
-
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirFrontend", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
+app.UseCors("PermitirFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -34,5 +43,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
