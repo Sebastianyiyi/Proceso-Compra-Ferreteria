@@ -8,7 +8,7 @@ namespace ClientesAPI.Models
 
         [Required]
         [MaxLength(13)]
-        public string Cedula { get; set; } = string.Empty;
+        public string NumeroDocumento { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(100)]
