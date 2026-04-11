@@ -15,7 +15,7 @@ builder.Services.AddControllers()
 
 builder.Services.AddHttpClient("ClientesAPI", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:5197/");
+    client.BaseAddress = new Uri(builder.Configuration["Servicios:ClientesAPI"]!);
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -23,7 +23,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PermitirFrontend", policy =>
+    options.AddPolicy("FrontendPolicy", policy =>
     {
         policy.WithOrigins("http://localhost:3000")
               .AllowAnyHeader()
@@ -32,7 +32,7 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-app.UseCors("PermitirFrontend");
+app.UseCors("FrontendPolicy");
 
 if (app.Environment.IsDevelopment())
 {

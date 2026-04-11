@@ -1,4 +1,4 @@
-namespace ComprasAPI.Models
+namespace ComprasAPI.DTOs
 {
     public class VentaRequest
     {

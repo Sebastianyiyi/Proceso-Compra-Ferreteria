@@ -17,10 +17,19 @@ namespace ComprasAPI.Controllers
         }
 
         // GET: api/Productos
+        // GET: api/Productos?buscar=martillo
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Producto>>> GetProductos()
+        public async Task<ActionResult<IEnumerable<Producto>>> GetProductos([FromQuery] string? buscar)
         {
-            return await _context.Productos.ToListAsync();
+            var query = _context.Productos.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+                query = query.Where(p =>
+                    p.Nombre.Contains(buscar) ||
+                    p.Marca.Contains(buscar) ||
+                    p.Descripcion.Contains(buscar));
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Productos/5
