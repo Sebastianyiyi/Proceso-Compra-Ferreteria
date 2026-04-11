@@ -107,8 +107,9 @@ export default function PaginaVenta() {
       {/* Header */}
       <header className="venta-header">
         <div className="header-content">
-          <div className="logo">🔧 Ferretería</div>
-          <h1>Nueva Venta</h1>
+          <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+            🔧 Ferretería Don Joaquín
+          </div>
         </div>
       </header>
 
