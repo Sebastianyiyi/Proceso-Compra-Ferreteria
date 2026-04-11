@@ -7,12 +7,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("PermitirFrontend", policy =>
+    options.AddPolicy("FrontendPolicy", policy =>
     {
         policy.WithOrigins("http://localhost:3000")
               .AllowAnyHeader()
@@ -20,8 +18,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
-app.UseCors("PermitirFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("FrontendPolicy");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
