@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ComprasAPI.Data;
+using ComprasAPI.DTOs;
 using ComprasAPI.Models;
 
 namespace ComprasAPI.Controllers
