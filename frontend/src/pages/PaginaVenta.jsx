@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { buscarClientePorCedula, crearCliente } from '../services/clientesService';
+import { buscarClientePorDocumento, crearCliente } from '../services/clientesService';
 import { obtenerProductos, crearVenta } from '../services/comprasService';
 import './PaginaVenta.css';
 
@@ -13,7 +13,7 @@ export default function PaginaVenta() {
   const [clienteEncontrado, setClienteEncontrado] = useState(false);
   const [mostrarFormCliente, setMostrarFormCliente] = useState(false);
   const [nuevoCliente, setNuevoCliente] = useState({
-    cedula: '', nombre: '', apellido: '',
+    numeroDocumento: '', nombre: '', apellido: '',
     direccion: '', telefono: '', email: '',
     fechaRegistro: new Date().toISOString()
   });
@@ -37,16 +37,20 @@ export default function PaginaVenta() {
   const buscarCliente = async () => {
     setError('');
     if (!cedula.trim()) return;
-    const encontrado = await buscarClientePorCedula(cedula);
-    if (encontrado) {
-      setCliente(encontrado);
-      setClienteEncontrado(true);
-      setMostrarFormCliente(false);
-    } else {
-      setCliente(null);
-      setClienteEncontrado(false);
-      setMostrarFormCliente(true);
-      setNuevoCliente(prev => ({ ...prev, cedula }));
+    try {
+      const resultado = await buscarClientePorDocumento(cedula);
+      if (resultado.encontrado) {
+        setCliente(resultado.usuario);
+        setClienteEncontrado(true);
+        setMostrarFormCliente(false);
+      } else {
+        setCliente(null);
+        setClienteEncontrado(false);
+        setMostrarFormCliente(true);
+        setNuevoCliente(prev => ({ ...prev, numeroDocumento: cedula }));
+      }
+    } catch {
+      setError('Error al buscar el cliente. Verifica el número ingresado.');
     }
   };
 

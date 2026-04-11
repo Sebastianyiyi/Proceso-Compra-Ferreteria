@@ -2,10 +2,16 @@ import axios from 'axios';
 
 const BASE_URL = process.env.REACT_APP_CLIENTES_API;
 
-export const buscarClientePorCedula = async (cedula) => {
-    const response = await axios.get(`${BASE_URL}/api/Usuarios`);
-    const cliente = response.data.find(u => u.cedula === cedula);
-    return cliente || null;
+export const buscarClientePorDocumento = async (numeroDocumento) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/Usuarios/documento/${numeroDocumento}`);
+        return { encontrado: true, ...response.data };
+    } catch (error) {
+        if (error.response?.status === 404) {
+            return { encontrado: false, tipoDocumento: error.response.data.tipoDocumento, numero: numeroDocumento };
+        }
+        throw error;
+    }
 };
 
 export const crearCliente = async (cliente) => {
