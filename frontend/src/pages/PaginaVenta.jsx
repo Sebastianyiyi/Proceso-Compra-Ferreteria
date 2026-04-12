@@ -43,7 +43,7 @@ export default function PaginaVenta() {
       try {
         const encontrado = await buscarClientePorDocumento(cedula.trim());
         if (encontrado?.encontrado) {
-          setCliente(encontrado);
+          setCliente({ ...encontrado.usuario, encontrado: true});
           setBusquedaRealizada(true);
           setMostrarFormCliente(false);
         } else {
@@ -61,7 +61,7 @@ export default function PaginaVenta() {
 
   const guardarNuevoCliente = async () => {
     try {
-      const creado = await crearCliente({ ...nuevoCliente, cedula });
+      const creado = await crearCliente({ ...nuevoCliente, numeroDocumento: cedula });
       setCliente({ encontrado: true, ...creado });
       setMostrarFormCliente(false);
     } catch {
@@ -88,6 +88,8 @@ export default function PaginaVenta() {
     if (!cliente || carrito.length === 0) return;
     setCargando(true);
     try {
+      console.log("Cliente objeto:", cliente);
+      console.log("UsuarioId a enviar:", cliente.id);
       const ventaData = {
         usuarioId: cliente.id,
         detalles: carrito.map(p => ({ productoId: p.id, cantidad: p.cantidad }))
