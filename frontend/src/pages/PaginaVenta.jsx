@@ -113,7 +113,7 @@ export default function PaginaVenta() {
       <header className="venta-header">
         <div className="header-content">
           <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            🔧 Ferretería Don Joaquín
+            Ferretería Don Joaquín
           </div>
         </div>
       </header>
@@ -308,7 +308,7 @@ export default function PaginaVenta() {
               onClick={procesarVenta}
               disabled={!cliente || carrito.length === 0 || cargando}
             >
-              {cargando ? 'Procesando...' : '🧾 Generar Factura'}
+              {cargando ? 'Procesando...' : 'Generar Factura'}
             </button>
           </div>
         </div>

@@ -38,7 +38,7 @@ export default function PaginaFactura() {
         {/* Encabezado */}
         <div className="factura-header">
           <div className="empresa-info">
-            <h1>🔧 Ferretería</h1>
+            <h1>Ferretería</h1>
             <p>Sistema de Ventas</p>
           </div>
           <div className="factura-meta">
