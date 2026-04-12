@@ -194,6 +194,11 @@ export default function PaginaVenta() {
               onChange={e => setBusquedaProducto(e.target.value)}
               className="search-input"
             />
+            {!cliente && (
+              <div className="aviso-sin-cliente">
+                Selecciona un cliente antes de agregar productos
+              </div>
+            )}
             <div className="productos-tabla">
               <div className="tabla-header">
                 <span>Producto</span>
@@ -215,7 +220,8 @@ export default function PaginaVenta() {
                   <button
                     className="btn-agregar-fila"
                     onClick={() => agregarAlCarrito(producto)}
-                    disabled={producto.stock === 0}
+                    disabled={producto.stock === 0 || !cliente}
+                    title={!cliente ? 'Primero selecciona un cliente' : ''}
                   >
                     + Agregar
                   </button>
@@ -277,7 +283,8 @@ export default function PaginaVenta() {
                         <button onClick={() => cambiarCantidad(item.id, item.cantidad + 1)}>+</button>
                       </div>
                       <p className="item-subtotal">${(item.precio * item.cantidad).toFixed(2)}</p>
-                      <button className="btn-eliminar" onClick={() => eliminarDelCarrito(item.id)}>🗑</button>
+                      <button className="btn-eliminar" onClick={() => 
+                        eliminarDelCarrito(item.id)}>Eliminar</button>
                     </div>
                   ))}
                 </div>
