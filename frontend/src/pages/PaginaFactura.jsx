@@ -19,78 +19,95 @@ export default function PaginaFactura() {
   if (cargando) return <div className="factura-loading">Cargando factura...</div>;
   if (!venta) return <div className="factura-loading">Factura no encontrada.</div>;
 
+  const cliente = venta.cliente;
+
   return (
     <div className="factura-page">
 
-      {/* Botones de acción — se ocultan al imprimir */}
-      <div className="factura-acciones no-print">
-        <button className="btn-volver" onClick={() => navigate('/')}>
-          ← Nueva venta
-        </button>
-        <button className="btn-imprimir" onClick={() => window.print()}>
-          Imprimir / Guardar PDF
-        </button>
-      </div>
+      {/* Cabecera principal */}
+      <header className="factura-topbar no-print">
+        <div className="factura-topbar-logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+          Ferretería Don Joaquín
+        </div>
+      </header>
 
       {/* Factura */}
       <div className="factura">
 
-        {/* Encabezado */}
+        {/* Encabezado empresa */}
         <div className="factura-header">
           <div className="empresa-info">
-            <h1>🔧 Ferretería</h1>
+            <h1>FACTURA</h1>
+            <h2>Ferretería Don Joaquín</h2>
             <p>Sistema de Ventas</p>
           </div>
           <div className="factura-meta">
-            <h2>FACTURA</h2>
-            <p className="numero-doc">{venta.numeroDocumento}</p>
-            <p className="fecha">
-              {new Date(venta.fechaVenta).toLocaleDateString('es-EC', {
-                year: 'numeric', month: 'long', day: 'numeric'
-              })}
-            </p>
-          </div>
-        </div>
-
-        <div className="factura-divider" />
-
-        {/* Datos del cliente */}
-        <div className="factura-cliente">
-          <h3>Datos del Cliente</h3>
-          <div className="cliente-datos">
-            <div>
-              <span className="label">ID Cliente</span>
-              <span>{venta.usuarioId}</span>
+            <div className="factura-meta-fila">
+              <span className="meta-label">N° Comprobante</span>
+              <span className="meta-valor">{venta.numeroDocumento}</span>
+            </div>
+            <div className="factura-meta-fila">
+              <span className="meta-label">Fecha de Emisión</span>
+              <span className="meta-valor">
+                {new Date(venta.fechaVenta).toLocaleDateString('es-EC', {
+                  year: 'numeric', month: 'long', day: 'numeric'
+                })}
+              </span>
             </div>
           </div>
         </div>
 
         <div className="factura-divider" />
 
-        {/* Tabla de productos */}
-        <table className="factura-tabla">
-          <thead>
-            <tr>
-              <th>Producto</th>
-              <th>Precio Unit.</th>
-              <th>Cantidad</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
+        {/* Datos del cliente en filas */}
+        <div className="factura-seccion">
+          <h3>Datos del Cliente</h3>
+          <div className="datos-tabla">
+            <div className="datos-header">
+              <span>N° Documento</span>
+              <span>Nombre</span>
+              <span>Apellido</span>
+              <span>Teléfono</span>
+              <span>Email</span>
+              <span>Dirección</span>
+            </div>
+            <div className="datos-fila">
+              <span>{cliente?.numeroDocumento ?? '—'}</span>
+              <span>{cliente?.nombre ?? '—'}</span>
+              <span>{cliente?.apellido ?? '—'}</span>
+              <span>{cliente?.telefono ?? '—'}</span>
+              <span>{cliente?.email ?? '—'}</span>
+              <span>{cliente?.direccion ?? '—'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="factura-divider" />
+
+        {/* Tabla de productos estilo filas */}
+        <div className="factura-seccion">
+          <h3>Detalle de Productos</h3>
+          <div className="productos-tabla-factura">
+            <div className="productos-header-factura">
+              <span>Producto</span>
+              <span>Marca</span>
+              <span>Descripción</span>
+              <span>Precio Unit.</span>
+              <span>Cantidad</span>
+              <span>Subtotal</span>
+            </div>
             {venta.detallesVenta.map(detalle => (
-              <tr key={detalle.id}>
-                <td>
-                  <p className="producto-nombre">{detalle.producto?.nombre}</p>
-                  <p className="producto-marca">{detalle.producto?.marca}</p>
-                </td>
-                <td>${detalle.precioUnitario.toFixed(2)}</td>
-                <td>{detalle.cantidad}</td>
-                <td>${detalle.subtotal.toFixed(2)}</td>
-              </tr>
+              <div key={detalle.id} className="productos-fila-factura">
+                <span className="prod-nombre">{detalle.producto?.nombre}</span>
+                <span className="prod-marca">{detalle.producto?.marca}</span>
+                <span className="prod-desc">{detalle.producto?.descripcion || '—'}</span>
+                <span className="prod-precio">${detalle.precioUnitario.toFixed(2)}</span>
+                <span>{detalle.cantidad}</span>
+                <span className="prod-precio">${detalle.subtotal.toFixed(2)}</span>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
 
         <div className="factura-divider" />
 
@@ -110,13 +127,24 @@ export default function PaginaFactura() {
           </div>
         </div>
 
-        {/* Pie de factura */}
+        {/* Pie */}
         <div className="factura-footer">
           <p>Gracias por su compra</p>
           <p className="text-muted">Documento generado el {new Date().toLocaleString('es-EC')}</p>
         </div>
 
       </div>
+
+      {/* Botones abajo */}
+      <div className="factura-acciones no-print">
+        <button className="btn-volver" onClick={() => navigate('/')}>
+          Nueva venta
+        </button>
+        <button className="btn-imprimir" onClick={() => window.print()}>
+          Imprimir / Guardar PDF
+        </button>
+      </div>
+
     </div>
   );
 }

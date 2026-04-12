@@ -31,7 +31,7 @@ namespace ComprasAPI.Controllers
 
         // GET: api/Ventas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Venta>> GetVenta(int id)
+        public async Task<ActionResult<object>> GetVenta(int id)
         {
             var venta = await _context.Ventas
                 .Include(v => v.DetallesVenta)
@@ -41,7 +41,30 @@ namespace ComprasAPI.Controllers
             if (venta == null)
                 return NotFound();
 
-            return venta;
+            // Obtener datos del cliente desde ClientesAPI
+            var client = _httpClientFactory.CreateClient("ClientesAPI");
+            var clienteResponse = await client.GetAsync($"api/Usuarios/{venta.UsuarioId}");
+
+            object? clienteData = null;
+            if (clienteResponse.IsSuccessStatusCode)
+            {
+                var json = await clienteResponse.Content.ReadAsStringAsync();
+                clienteData = System.Text.Json.JsonSerializer.Deserialize<object>(json,
+                    new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+
+            return Ok(new
+            {
+                venta.Id,
+                venta.UsuarioId,
+                venta.NumeroDocumento,
+                venta.FechaVenta,
+                venta.Subtotal,
+                venta.IVA,
+                venta.Total,
+                venta.DetallesVenta,
+                Cliente = clienteData
+            });
         }
 
         // POST: api/Ventas

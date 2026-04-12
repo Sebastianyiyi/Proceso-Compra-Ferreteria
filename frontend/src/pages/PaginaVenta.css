@@ -188,8 +188,8 @@
 .tabla-fila:hover { background: #fafafa; }
 
 .prod-nombre { font-size: 0.875rem; font-weight: 500; color: #1d1d1f; }
-.prod-marca { font-size: 0.8rem; color: #6b7280; }
-.prod-desc { font-size: 0.8rem; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prod-marca { font-size: 0.8rem; color: #374151; }
+.prod-desc { font-size: 0.8rem; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .prod-precio { font-size: 0.875rem; font-weight: 600; color: #2563eb; }
 .prod-stock { font-size: 0.8rem; color: #6b7280; }
 .stock-bajo { color: #dc2626; font-weight: 600; }
@@ -207,7 +207,7 @@
   justify-self: end;
 }
 .btn-agregar-fila:hover { background: #1d4ed8; }
-.btn-agregar-fila:disabled { background: #d1d5db; cursor: not-allowed; }
+.btn-agregar-fila:disabled { background: #e5e7eb; color: #6b7280; cursor: not-allowed; }
 
 .tabla-vacia {
   padding: 2rem;
@@ -253,7 +253,7 @@
 
 .carrito-tabla-header {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr 90px 70px 80px;
   gap: 0.5rem;
   font-size: 0.72rem;
   font-weight: 600;
@@ -269,7 +269,7 @@
 
 .carrito-item {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr 90px 70px 80px;
   gap: 0.5rem;
   align-items: center;
   padding: 0.6rem 0;
@@ -278,7 +278,7 @@
 
 .item-info { min-width: 0; }
 .item-nombre { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.item-precio { font-size: 0.75rem; color: #9ca3af; }
+.item-precio { font-size: 0.75rem; color: #374151; }
 
 .item-controles {
   display: flex;
@@ -303,15 +303,22 @@
 .item-subtotal { font-size: 0.875rem; font-weight: 600; text-align: right; min-width: 60px; }
 
 .btn-eliminar {
-  background: none;
-  border: none;
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.3rem 0.5rem;
   cursor: pointer;
-  font-size: 0.85rem;
-  opacity: 0.4;
-  transition: opacity 0.2s;
-  padding: 0.2rem;
+  transition: background 0.2s, border-color 0.2s;
+  text-align: center;
 }
-.btn-eliminar:hover { opacity: 1; }
+.btn-eliminar:hover {
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+}
 
 .totales { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem; }
 
@@ -347,4 +354,19 @@
   transition: background 0.2s;
 }
 .btn-procesar:hover { background: #1d4ed8; }
-.btn-procesar:disabled { background: #d1d5db; cursor: not-allowed; }
+.btn-procesar:disabled {
+  background: #e5e7eb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.aviso-sin-cliente {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  color: #92400e;
+  margin-bottom: 0.75rem;
+  text-align: center;
+}

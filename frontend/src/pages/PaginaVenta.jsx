@@ -96,8 +96,13 @@ export default function PaginaVenta() {
       };
       const venta = await crearVenta(ventaData);
       navigate(`/factura/${venta.id}`);
-    } catch {
-      setError('Error al procesar la venta.');
+    } catch (err) {
+      const mensajeBackend = err.response?.data;
+      if (typeof mensajeBackend == 'string') {
+        setError(mensajeBackend);
+      } else {
+        setError('Error al procesar la venta.');
+      }
       setCargando(false);
     }
   };
@@ -113,7 +118,7 @@ export default function PaginaVenta() {
       <header className="venta-header">
         <div className="header-content">
           <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-            🔧 Ferretería Don Joaquín
+            Ferretería Don Joaquín
           </div>
         </div>
       </header>
@@ -194,6 +199,11 @@ export default function PaginaVenta() {
               onChange={e => setBusquedaProducto(e.target.value)}
               className="search-input"
             />
+            {!cliente && (
+              <div className="aviso-sin-cliente">
+                Selecciona un cliente antes de agregar productos
+              </div>
+            )}
             <div className="productos-tabla">
               <div className="tabla-header">
                 <span>Producto</span>
@@ -215,7 +225,8 @@ export default function PaginaVenta() {
                   <button
                     className="btn-agregar-fila"
                     onClick={() => agregarAlCarrito(producto)}
-                    disabled={producto.stock === 0}
+                    disabled={producto.stock === 0 || !cliente}
+                    title={!cliente ? 'Primero selecciona un cliente' : ''}
                   >
                     + Agregar
                   </button>
@@ -259,7 +270,7 @@ export default function PaginaVenta() {
                 {/* Encabezado tabla carrito */}
                 <div className="carrito-tabla-header">
                   <span>Producto</span>
-                  <span>Cant.</span>
+                  <span>Cantidad</span>
                   <span>Subtotal</span>
                   <span></span>
                 </div>
@@ -277,7 +288,8 @@ export default function PaginaVenta() {
                         <button onClick={() => cambiarCantidad(item.id, item.cantidad + 1)}>+</button>
                       </div>
                       <p className="item-subtotal">${(item.precio * item.cantidad).toFixed(2)}</p>
-                      <button className="btn-eliminar" onClick={() => eliminarDelCarrito(item.id)}>🗑</button>
+                      <button className="btn-eliminar" onClick={() => 
+                        eliminarDelCarrito(item.id)}>Eliminar</button>
                     </div>
                   ))}
                 </div>
@@ -308,7 +320,7 @@ export default function PaginaVenta() {
               onClick={procesarVenta}
               disabled={!cliente || carrito.length === 0 || cargando}
             >
-              {cargando ? 'Procesando...' : '🧾 Generar Factura'}
+              {cargando ? 'Procesando...' : 'Generar Factura'}
             </button>
           </div>
         </div>
