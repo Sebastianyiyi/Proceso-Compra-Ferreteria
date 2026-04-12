@@ -188,8 +188,8 @@
 .tabla-fila:hover { background: #fafafa; }
 
 .prod-nombre { font-size: 0.875rem; font-weight: 500; color: #1d1d1f; }
-.prod-marca { font-size: 0.8rem; color: #6b7280; }
-.prod-desc { font-size: 0.8rem; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.prod-marca { font-size: 0.8rem; color: #374151; }
+.prod-desc { font-size: 0.8rem; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .prod-precio { font-size: 0.875rem; font-weight: 600; color: #2563eb; }
 .prod-stock { font-size: 0.8rem; color: #6b7280; }
 .stock-bajo { color: #dc2626; font-weight: 600; }
@@ -207,7 +207,7 @@
   justify-self: end;
 }
 .btn-agregar-fila:hover { background: #1d4ed8; }
-.btn-agregar-fila:disabled { background: #d1d5db; cursor: not-allowed; }
+.btn-agregar-fila:disabled { background: #e5e7eb; color: #6b7280; cursor: not-allowed; }
 
 .tabla-vacia {
   padding: 2rem;
@@ -278,7 +278,7 @@
 
 .item-info { min-width: 0; }
 .item-nombre { font-size: 0.85rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.item-precio { font-size: 0.75rem; color: #9ca3af; }
+.item-precio { font-size: 0.75rem; color: #374151; }
 
 .item-controles {
   display: flex;

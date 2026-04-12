@@ -96,8 +96,13 @@ export default function PaginaVenta() {
       };
       const venta = await crearVenta(ventaData);
       navigate(`/factura/${venta.id}`);
-    } catch {
-      setError('Error al procesar la venta.');
+    } catch (err) {
+      const mensajeBackend = err.response?.data;
+      if (typeof mensajeBackend == 'string') {
+        setError(mensajeBackend);
+      } else {
+        setError('Error al procesar la venta.');
+      }
       setCargando(false);
     }
   };
