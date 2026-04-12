@@ -37,9 +37,9 @@ export default function PaginaFactura() {
         {/* Encabezado empresa */}
         <div className="factura-header">
           <div className="empresa-info">
-            <h1>Ferretería Don Joaquín</h1>
+            <h1>FACTURA</h1>
+            <h2>Ferretería Don Joaquín</h2>
             <p>Sistema de Ventas</p>
-            <h2>FACTURA</h2>
           </div>
           <div className="factura-meta">
             <div className="factura-meta-fila">
@@ -64,17 +64,17 @@ export default function PaginaFactura() {
           <h3>Datos del Cliente</h3>
           <div className="datos-tabla">
             <div className="datos-header">
+              <span>N° Documento</span>
               <span>Nombre</span>
               <span>Apellido</span>
-              <span>N° Documento</span>
               <span>Teléfono</span>
               <span>Email</span>
               <span>Dirección</span>
             </div>
             <div className="datos-fila">
+              <span>{cliente?.numeroDocumento ?? '—'}</span>
               <span>{cliente?.nombre ?? '—'}</span>
               <span>{cliente?.apellido ?? '—'}</span>
-              <span>{cliente?.numeroDocumento ?? '—'}</span>
               <span>{cliente?.telefono ?? '—'}</span>
               <span>{cliente?.email ?? '—'}</span>
               <span>{cliente?.direccion ?? '—'}</span>
