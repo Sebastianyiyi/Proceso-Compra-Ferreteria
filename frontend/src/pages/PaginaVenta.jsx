@@ -265,7 +265,7 @@ export default function PaginaVenta() {
                 {/* Encabezado tabla carrito */}
                 <div className="carrito-tabla-header">
                   <span>Producto</span>
-                  <span>Cant.</span>
+                  <span>Cantidad</span>
                   <span>Subtotal</span>
                   <span></span>
                 </div>
